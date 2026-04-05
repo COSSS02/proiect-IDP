@@ -1,0 +1,8 @@
+{
+    "realm": "e-shop",
+    "auth-server-url": "http://localhost:8080/",
+    "ssl-required": "external",
+    "resource": "e-shop",
+    "public-client": true,
+    "confidential-port": 0
+}
