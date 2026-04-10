@@ -1,0 +1,171 @@
+.add-product-container {
+    display: flex;
+    justify-content: center;
+    padding: 2rem;
+}
+
+.add-product-form {
+    width: 100%;
+    max-width: 700px;
+    background-color: #3a3a3a;
+    padding: 2rem;
+    border-radius: 8px;
+}
+
+.add-product-form h2,
+.form-description {
+    text-align: center;
+}
+
+.add-product-form fieldset {
+    border: 1px solid #555;
+    border-radius: 4px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.add-product-form legend {
+    padding: 0 0.5rem;
+    color: #e67e22;
+    font-weight: bold;
+}
+
+.form-group-row {
+    display: flex;
+    gap: 1rem;
+}
+
+.form-group-row .form-group {
+    flex: 1;
+}
+
+.attribute-row {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    align-items: center;
+}
+
+.attribute-row input {
+    flex: 1;
+}
+
+.add-btn,
+.remove-btn {
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.add-btn {
+    padding: 0.5rem;
+    background-color: #522546;
+    color: white;
+    margin-top: 0.5rem;
+}
+
+.add-btn:hover {
+    background-color: #451535;
+}
+
+.remove-btn {
+    background-color: #c0392b;
+    color: white;
+    width: 20px;
+    height: 20px;
+    font-size: 1.2rem;
+    line-height: 1;
+}
+
+.remove-btn:hover {
+    background-color: #9e3229;
+}
+
+/* General styles from AddCategoryPage can be reused */
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #555;
+    background-color: #2c2c2c;
+    color: white;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.submit-button {
+    width: 100%;
+    padding: 0.75rem;
+    border: none;
+    background-color: #88304E;
+    color: white;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.submit-button:hover {
+    background-color: #522546;
+}
+
+.submit-button:disabled {
+    background-color: #555;
+    cursor: not-allowed;
+}
+
+.form-actions-row {
+    display: flex;
+    gap: 0.75rem;
+    align-items: normal;
+    justify-content: flex-end;
+    margin-top: 0.75rem;
+}
+
+.delete-button {
+    padding: 0.75rem 1rem;
+    border: none;
+    background-color: #c0392b;
+    color: white;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.delete-button:hover {
+    background-color: #9e3229;
+}
+
+.error-message,
+.success-message {
+    padding: 0.75rem;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.error-message {
+    color: #ff6b6b;
+    background-color: rgba(255, 107, 107, 0.1);
+    border: 1px solid #ff6b6b;
+}
+
+.success-message {
+    color: #2ecc71;
+    background-color: rgba(46, 204, 113, 0.1);
+    border: 1px solid #2ecc71;
+}

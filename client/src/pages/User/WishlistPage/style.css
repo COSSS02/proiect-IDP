@@ -1,0 +1,11 @@
+.wishlist-container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 2rem;
+}
+
+.wishlist-container h1 {
+    border-bottom: 1px solid #444;
+    padding-bottom: 1rem;
+    margin-bottom: 2rem;
+}

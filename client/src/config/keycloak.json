@@ -1,0 +1,5 @@
+{
+    "realm": "e-shop",
+    "url": "http://localhost:8080/",
+    "clientId": "e-shop"
+}

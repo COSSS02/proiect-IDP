@@ -1,0 +1,60 @@
+.category-page-container h1 {
+    text-transform: capitalize;
+    border-bottom: 2px solid #88304E;
+    display: inline-block;
+    padding-bottom: 0.5rem;
+    margin-bottom: 2rem;
+}
+
+.category-description {
+    font-size: 1.4rem;
+    font-style: italic;
+    max-width: 800px;
+    margin: -1rem auto 2rem auto;
+}
+
+.filter-sidebar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content:space-evenly;
+    gap: 2.5rem;
+    background-color: #3a3a3a;
+    border: 1px solid #444;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin: 1rem 2rem;
+}
+
+.filter-sidebar h3 {
+    margin: 0;
+    border-bottom: none;
+    padding-bottom: 0;
+    font-size: 1.4rem;
+    color: #e67e22;
+}
+
+.filter-group {
+    margin-bottom: 0;
+}
+
+.filter-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+    color: #dcdcdc;
+}
+
+.filter-group select {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #88304E;
+    background-color: #88304E;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.error-message {
+    color: #ff6b6b;
+}

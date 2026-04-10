@@ -1,0 +1,22 @@
+.hamburger-menu {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 1.5rem;
+    height: 1.5rem;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+}
+
+.hamburger-menu:focus {
+    outline:none;
+}
+
+.hamburger-line {
+    width: 1.5rem;
+    height: 0.21rem;
+    background: #2C2C2C;
+    border-radius: 10px;
+}

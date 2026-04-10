@@ -1,0 +1,26 @@
+.sort-controls {
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    gap: 0.5rem;
+    padding-right: 2rem;
+}
+
+.sort-controls label {
+    font-size: 1rem;
+    color: #ccc;
+}
+
+.sort-controls select {
+    padding: 0.5rem;
+    border: 1px solid #88304E;
+    background-color: #88304E;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.sort-controls select:focus {
+    outline: none;
+}

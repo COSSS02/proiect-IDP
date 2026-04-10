@@ -1,0 +1,81 @@
+.dashboard-container {
+    max-width: 1400px;
+    margin: 2rem auto;
+    padding: 0 2rem;
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 1.5rem;
+}
+
+.dashboard-card {
+    background-color: #3a3a3a;
+    border-radius: 8px;
+    padding: 1.5rem;
+    border-left: 5px solid #e67e22;
+}
+
+.dashboard-card h3 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    color: #f1f1f1;
+}
+
+/* Stat Card Styles */
+.stat-card p {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin: 0;
+    color: #fff;
+}
+
+/* List Card Styles */
+.list-card ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.list-card li {
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #444;
+}
+
+.list-card li:last-child {
+    border-bottom: none;
+}
+
+.list-card a {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-decoration: none;
+    color: #ccc;
+    transition: color 0.2s;
+}
+
+.list-card a:hover {
+    color: #fff;
+}
+
+.list-card a span {
+    font-weight: bold;
+    color: #e67e22;
+}
+
+.list-card a small {
+    display: block;
+    width: 100%;
+    color: #999;
+    font-size: 0.8rem;
+    margin-top: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.empty-message {
+    color: #999;
+}

@@ -1,0 +1,39 @@
+.spinner-container {
+    /* Use fixed positioning to overlay the entire viewport */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+
+    /* Flexbox for centering the spinner within the container */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    /* Optional: Add a background to dim the content behind it */
+    background-color: #242424;
+    z-index: 9999;
+    /* Ensure it's on top of all other content */
+}
+
+.loading-spinner {
+    width: 50px;
+    height: 50px;
+    border: 8px solid #f3f3f3;
+    /* Light grey */
+    border-top: 8px solid #3498db;
+    /* Blue */
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}

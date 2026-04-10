@@ -1,0 +1,111 @@
+.admin-product-container {
+    max-width: 1400px;
+    margin: 2rem auto;
+    padding: 0 2rem;
+}
+
+.toolbar {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.admin-product-container .toolbar {
+    justify-content: space-between;
+}
+
+.admin-product-container .search-input {
+    padding: 0.6rem 0.75rem;
+    background: #2c2c2c;
+    border: 1px solid #555;
+    color: #eee;
+    border-radius: 4px;
+    width: 340px;
+}
+
+.admin-product-container .sort-controls {
+    padding-right: 0;
+}
+
+.admin-table-container {
+    overflow-x: auto;
+    background-color: #3a3a3a;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    color: #ccc;
+}
+
+.admin-table th,
+.admin-table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid #444;
+}
+
+.admin-table th {
+    background-color: #2c2c2c;
+    color: #fff;
+}
+
+.admin-table tbody tr:hover {
+    background-color: #4a4a4a;
+}
+
+.price-cell {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.regular-price {
+    color: #e67e22;
+    font-weight: 700;
+}
+
+.original-price {
+    color: #999;
+    text-decoration: line-through;
+    font-weight: normal;
+}
+
+.discounted-price {
+    color: #e74c3c;
+    font-weight: 700;
+}
+
+.actions-cell {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.action-btn {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    color: white;
+    text-decoration: none;
+    font-size: 0.875rem;
+    text-align: center;
+}
+
+.edit-btn {
+    background-color: #2980b9;
+}
+
+.edit-btn:hover {
+    background-color: #3498db;
+}
+
+.delete-btn {
+    background-color: #c0392b;
+}
+
+.delete-btn:hover {
+    background-color: #e74c3c;
+}

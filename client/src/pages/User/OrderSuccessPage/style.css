@@ -1,0 +1,40 @@
+.order-status-container {
+    max-width: 600px;
+    margin: 4rem auto;
+    padding: 2rem;
+    text-align: center;
+    background-color: #3a3a3a;
+    border-radius: 8px;
+}
+
+.order-status-container h2 {
+    color: #2ecc71;
+    /* Green for success */
+    margin-bottom: 1rem;
+}
+
+.order-status-container p {
+    color: #ccc;
+    font-size: 1.1rem;
+    line-height: 1.6;
+}
+
+.order-status-container.error h2 {
+    color: #e74c3c;
+    /* Red for error */
+}
+
+.status-link {
+    display: inline-block;
+    margin-top: 2rem;
+    padding: 0.75rem 1.5rem;
+    background-color: #88304E;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.status-link:hover {
+    background-color: #522546;
+}
