@@ -1,0 +1,40 @@
+name,price,core_count,core_clock,boost_clock,microarchitecture,tdp,graphics
+AMD Ryzen 7 9800X3D,451.5,8,4.7,5.2,Zen 5,120,Radeon
+AMD Ryzen 7 7800X3D,340.05,8,4.2,5,Zen 4,120,Radeon
+AMD Ryzen 5 7600X,170.49,6,4.7,5.3,Zen 4,105,Radeon
+AMD Ryzen 5 9600X,204.99,6,3.9,5.4,Zen 5,65,Radeon
+AMD Ryzen 7 7700X,242.98,8,4.5,5.4,Zen 4,105,Radeon
+AMD Ryzen 9 9950X3D,649.99,16,4.3,5.7,Zen 5,170,Radeon
+AMD Ryzen 5 5500,74.22,6,3.6,4.2,Zen 3,65,
+AMD Ryzen 7 9700X,305.89,8,3.8,5.5,Zen 5,65,Radeon
+AMD Ryzen 5 5600X,158.99,6,3.7,4.6,Zen 3,65,
+AMD Ryzen 5 5600,125.61,6,3.5,4.4,Zen 3,65,
+AMD Ryzen 7 5800X,179.95,8,3.8,4.7,Zen 3,105,
+Intel Core i7-14700K,297.17,20,3.4,5.6,Raptor Lake Refresh,125,Intel UHD Graphics 770
+Intel Core i9-14900K,439,24,3.2,6,Raptor Lake Refresh,125,Intel UHD Graphics 770
+Intel Core i5-12400F,108.99,6,2.5,4.4,Alder Lake,65,
+AMD Ryzen 5 3600,79.75,6,3.6,4.2,Zen 2,65,
+AMD Ryzen 5 7600,196.97,6,3.8,5.1,Zen 4,65,Radeon
+AMD Ryzen 7 5700X,154.99,8,3.4,4.6,Zen 3,65,
+AMD Ryzen 9 7900X,314.11,12,4.7,5.6,Zen 4,170,Radeon
+AMD Ryzen 9 9900X,359,12,4.4,5.6,Zen 5,120,Radeon
+Intel Core i5-14600K,189.99,14,3.5,5.3,Raptor Lake Refresh,125,Intel UHD Graphics 770
+Intel Core Ultra 7 265K,269.99,20,3.9,5.5,Arrow Lake,125,Intel Xe
+AMD Ryzen 7 5700X3D,313.3,8,3,4.1,Zen 3,105,
+Intel Core i5-14400F,125.99,10,2.5,4.7,Raptor Lake Refresh,65,
+AMD Ryzen 9 9950X,533.83,16,4.3,5.7,Zen 5,170,Radeon
+AMD Ryzen 5 7500F,,6,3.7,5,Zen 4,65,
+AMD Ryzen 7 5800XT,140,8,3.8,4.8,Zen 3,105,
+Intel Core Ultra 9 285K,559.99,24,3.7,5.7,Arrow Lake,125,Intel Xe
+Intel Core i7-12700K,214.15,12,3.6,5,Alder Lake,125,Intel UHD Graphics 770
+AMD Ryzen 5 7600X3D,433.5,6,4.1,4.7,Zen 4,65,Radeon
+AMD Ryzen 5 5600G,134.99,6,3.9,4.4,Zen 3,65,Radeon Vega 7
+AMD Ryzen 7 7700,293.97,8,3.6,5.3,Zen 4,65,Radeon
+Intel Core i5-13400F,151.47,10,2.5,4.6,Raptor Lake,65,
+AMD Ryzen 5 7500F,,6,3.7,5,Zen 4,65,
+Intel Core i7-12700KF,174.99,12,3.6,5,Alder Lake,125,
+AMD Ryzen 9 5900X,254.99,12,3.7,4.8,Zen 3,105,
+AMD Ryzen 7 3700X,142.94,8,3.6,4.4,Zen 2,65,
+Intel Core i5-12600KF,129.99,10,3.7,4.9,Alder Lake,125,
+AMD Ryzen 5 8400F,137.57,6,4.2,4.7,Zen 4,65,
+AMD Ryzen 5 8500G,152.5,6,4.1,5,Zen 4,65,Radeon 740M
