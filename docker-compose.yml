@@ -1,0 +1,93 @@
+services:
+  # The single production service
+  server:
+    build:
+      # The context is the project root so the Dockerfile can access ./client
+      context: .
+      dockerfile: ./server/Dockerfile
+      # Target the final 'runner' stage for a lean production image
+      target: runner
+    container_name: e-shop-server-prod
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./server/.env
+    # Mount certificates read-only.
+    volumes:
+      - ./server/certs:/app/certs:ro
+    networks:
+      - e-shop-net
+    depends_on:
+      - keycloak
+        # condition: service_healthy
+
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    restart: unless-stopped
+    volumes:
+      - redis_data:/data
+    networks:
+      - e-shop-net
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    container_name: keycloak-server
+    command: start-dev --import-realm
+    environment:
+      - KEYCLOAK_ADMIN=${KEYCLOAK_ADMIN}
+      - KEYCLOAK_ADMIN_PASSWORD=${KEYCLOAK_ADMIN_PASSWORD}
+      - KC_DB=mariadb
+      - KC_DB_URL_HOST=mariadb
+      - KC_DB_URL_DATABASE=${MARIADB_DATABASE}
+      - KC_DB_USERNAME=${MARIADB_USER}
+      - KC_DB_PASSWORD=${MARIADB_PASSWORD}
+      - KC_HTTP_PORT=8080
+      - KC_HEALTH_ENABLED=true
+      - KC_HOSTNAME=localhost
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./keycloak/import:/opt/keycloak/data/import
+    networks:
+      - e-shop-net
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    # healthcheck:
+    #   test: ["CMD-SHELL", "exec 3<> /dev/tcp/127.0.0.1/9000; echo -e 'GET /health/ready HTTP/1.1\\r\\nhost: http://localhost\\r\\nConnection: close\\r\\n\\r\\n' >&3; if [ $? -eq 0 ]; then echo 'Healthcheck Successful'; exit 0; else echo 'Healthcheck Failed'; exit 1; fi;"]
+    #   interval: 30s
+    #   timeout: 10s
+    #   retries: 5
+    #   start_period: 30s
+
+  mariadb:
+    image: mariadb:latest
+    container_name: mariadb
+    command: --innodb-use-native-aio=0
+    volumes:
+      - keycloak_db_data:/var/lib/mysql
+      - ./mariadb:/docker-entrypoint-initdb.d
+    environment:
+      - MARIADB_ROOT_PASSWORD=${MARIADB_ROOT_PASSWORD}
+      - MARIADB_DATABASE=${MARIADB_DATABASE}
+      - MARIADB_USER=${MARIADB_USER}
+      - MARIADB_PASSWORD=${MARIADB_PASSWORD}
+    networks:
+      - e-shop-net
+    healthcheck:
+      test: ["CMD", "mariadb-admin", "ping", "-h", "localhost", "-u", "root", "-p${MARIADB_ROOT_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+
+# Define the network
+networks:
+  e-shop-net:
+    driver: bridge
+
+volumes:
+  keycloak_db_data:
+  redis_data:

@@ -1,0 +1,111 @@
+version: '3.8'
+
+services:
+  server:
+    image: e-shop-server:build
+    env_file:
+      - ./server/.env
+    volumes:
+      - ./server/certs:/app/certs:ro
+    networks:
+      - public-net
+      - db-net
+      - cache-net
+    ports:
+      - target: 3000
+        published: 3000
+        protocol: tcp
+        mode: ingress
+    deploy:
+      replicas: 4
+      restart_policy:
+        condition: on-failure
+
+  client:
+    image: e-shop-client:build
+    env_file:
+      - ./client/.env
+    volumes:
+      - ./client/certs:/app/certs:ro
+    networks:
+      - public-net
+    ports:
+      - "5173:5173"
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+
+  redis:
+    image: redis:7-alpine
+    networks:
+      - cache-net
+    volumes:
+      - redis_data:/data
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    command: start-dev --import-realm --verbose
+    environment:
+      - KC_BOOTSTRAP_ADMIN_USERNAME=${KEYCLOAK_ADMIN}
+      - KC_BOOTSTRAP_ADMIN_PASSWORD=${KEYCLOAK_ADMIN_PASSWORD}
+      - KC_DB=${KEYCLOAK_DB}
+      - KC_DB_URL_HOST=${KEYCLOAK_DB_URL_HOST}
+      - KC_DB_URL_DATABASE=${MARIADB_DATABASE}
+      - KC_DB_USERNAME=${MARIADB_USER}
+      - KC_DB_PASSWORD=${MARIADB_PASSWORD}
+      - KC_HTTP_PORT=${KEYCLOAK_HTTP_PORT}
+      - KC_HEALTH_ENABLED=true
+      - KC_HOSTNAME=localhost
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./keycloak/import:/opt/keycloak/data/import
+    networks:
+      - public-net
+      - db-net
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+
+  mariadb:
+    image: mariadb:latest
+    command: --innodb-use-native-aio=0
+    volumes:
+      - keycloak_db_data:/var/lib/mysql
+      - ./mariadb:/docker-entrypoint-initdb.d
+    environment:
+      - MARIADB_ROOT_PASSWORD=${MARIADB_ROOT_PASSWORD}
+      - MARIADB_DATABASE=${MARIADB_DATABASE}
+      - MARIADB_USER=${MARIADB_USER}
+      - MARIADB_PASSWORD=${MARIADB_PASSWORD}
+    networks:
+      - db-net
+    healthcheck:
+      test: ["CMD", "mariadb-admin", "ping", "-h", "localhost", "-u", "root", "-p${MARIADB_ROOT_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+
+networks:
+  public-net:
+    driver: overlay
+  db-net:
+    driver: overlay
+    internal: true
+  cache-net:
+    driver: overlay
+    internal: true
+
+volumes:
+  keycloak_db_data:
+  redis_data:
