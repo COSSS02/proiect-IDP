@@ -32,7 +32,7 @@ Once the stack is running, the services are available at the following endpoints
 - Frontend Application: https://localhost:5173
 - Backend API: https://localhost:3000
 - Keycloak Admin Console: http://localhost:8080
-
+- Adminer Database Management: http://localhost:8081
 
 ### Replicas Test
 
