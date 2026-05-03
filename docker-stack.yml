@@ -8,18 +8,16 @@ services:
     volumes:
       - ./server/certs:/app/certs:ro
     networks:
-      - public-net
+      - internal-net
       - db-net
       - cache-net
-    ports:
-      - target: 3000
-        published: 3000
-        protocol: tcp
-        mode: ingress
     deploy:
       replicas: 4
       restart_policy:
         condition: on-failure
+      labels:
+        - "kong.service=server"
+        - "kong.upstream=server:3000"
 
   client:
     image: e-shop-client:build
@@ -28,13 +26,14 @@ services:
     volumes:
       - ./client/certs:/app/certs:ro
     networks:
-      - public-net
-    ports:
-      - "5173:5173"
+      - internal-net
     deploy:
       replicas: 1
       restart_policy:
         condition: on-failure
+      labels:
+        - "kong.service=client"
+        - "kong.upstream=client:5173"
 
   redis:
     image: redis:7-alpine
@@ -61,13 +60,42 @@ services:
       - KC_HTTP_PORT=${KEYCLOAK_HTTP_PORT}
       - KC_HEALTH_ENABLED=true
       - KC_HOSTNAME=localhost
-    ports:
-      - "8080:8080"
+      - KC_HOSTNAME_STRICT=false
+      - KC_PROXY=edge
+      - KC_HTTP_RELATIVE_PATH=/auth
     volumes:
       - ./keycloak/import:/opt/keycloak/data/import
     networks:
-      - public-net
+      - internal-net
       - db-net
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      labels:
+        - "kong.service=keycloak"
+        - "kong.upstream=keycloak:8080"
+
+  kong:
+    image: kong:latest
+    volumes:
+      - ./kong:/usr/local/kong/declarative
+    environment:
+      KONG_DATABASE: 'off'
+      KONG_DECLARATIVE_CONFIG: /usr/local/kong/declarative/kong.yml
+      KONG_PROXY_ACCESS_LOG: /dev/stdout
+      KONG_ADMIN_ACCESS_LOG: /dev/stdout
+      KONG_PROXY_ERROR_LOG: /dev/stderr
+      KONG_ADMIN_ERROR_LOG: /dev/stderr
+      KONG_ADMIN_LISTEN: 0.0.0.0:8001, 0.0.0.0:8444 ssl
+    ports:
+      - "80:8000"
+      - "443:8443"
+      - 8001:8001
+      - 8444:8444
+    networks:
+      - gateway-net
+      - internal-net
     deploy:
       replicas: 1
       restart_policy:
@@ -99,20 +127,24 @@ services:
   adminer:
     image: adminer
     networks:
-      - public-net
+      - internal-net
       - db-net
-    ports:
-      - "8081:8080"
     environment:
       - ADMINER_DEFAULT_SERVER=mariadb
     deploy:
       replicas: 1
       restart_policy:
         condition: on-failure
+      labels:
+        - "kong.service=adminer"
+        - "kong.upstream=adminer:8080"
 
 networks:
-  public-net:
+  gateway-net:
     driver: overlay
+  internal-net:
+    driver: overlay
+    internal: true
   db-net:
     driver: overlay
     internal: true

@@ -1,8 +1,9 @@
 {
     "realm": "e-shop",
-    "auth-server-url": "http://localhost:8080/",
+    "auth-server-url": "http://keycloak:8080/auth/",
     "ssl-required": "external",
     "resource": "e-shop",
     "public-client": true,
-    "confidential-port": 0
+    "confidential-port": 0,
+    "bearer-only": false
 }

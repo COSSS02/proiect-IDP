@@ -77,8 +77,8 @@ const checkoutController = {
                 mode: 'payment',
                 customer: stripeCustomerId,
                 line_items,
-                success_url: `${process.env.CLIENT_URL || 'https://localhost:5173'}/order/success?session_id={CHECKOUT_SESSION_ID}`,
-                cancel_url: `${process.env.CLIENT_URL || 'https://localhost:5173'}/cart`,
+                success_url: `${process.env.CLIENT_URL || 'https://localhost'}/order/success?session_id={CHECKOUT_SESSION_ID}`,
+                cancel_url: `${process.env.CLIENT_URL || 'https://localhost'}/cart`,
                 metadata: {
                     cart_user_id: userId,
                     shippingAddressId: shippingAddressId,
@@ -87,6 +87,8 @@ const checkoutController = {
                 payment_intent_data: {
                     setup_future_usage: 'on_session',
                 },
+            }, {
+                timeout: 10000, 
             });
 
             res.status(200).json({ id: session.id });

@@ -1,5 +1,5 @@
 {
     "realm": "e-shop",
-    "url": "http://localhost:8080/",
+    "url": "http://localhost/auth/",
     "clientId": "e-shop"
 }

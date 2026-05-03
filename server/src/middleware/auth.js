@@ -16,6 +16,7 @@ const authMiddleware = async (req, res, next) => {
         const response = await axios.get(userInfoUrl, {
             headers: {
                 Authorization: authHeader,
+                Host: 'localhost'
             },
         });
 
@@ -31,7 +32,7 @@ const authMiddleware = async (req, res, next) => {
         next();
     } catch (error) {
         // If the request throws an error, the token is invalid or expired.
-        console.error('Token validation error:', error.response ? error.response.data : error.message);
+        console.error('Token validation error:', error.message);
         return res.status(401).json({ error: 'Unauthorized: Invalid token' });
     }
 };

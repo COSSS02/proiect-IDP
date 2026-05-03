@@ -1,0 +1,29 @@
+_format_version: "3.0"
+_transform: true
+
+services:
+  - name: client-app
+    url: https://client:5173
+    routes:
+      - name: client-route
+        paths:
+          - /
+        strip_path: false
+        preserve_host: true
+
+  - name: keycloak-auth
+    url: http://keycloak:8080
+    routes:
+      - name: auth-route
+        paths:
+          - /auth
+        strip_path: false
+        preserve_host: true
+
+  - name: adminer-db
+    url: http://adminer:8080
+    routes:
+      - name: adminer-route
+        paths:
+          - /adminer
+        strip_path: false
