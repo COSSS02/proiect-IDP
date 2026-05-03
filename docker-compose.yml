@@ -1,26 +1,51 @@
+version: '3.8'
+
 services:
-  # The single production service
   server:
     build:
-      # The context is the project root so the Dockerfile can access ./client
       context: .
       dockerfile: ./server/Dockerfile
-      # Target the final 'runner' stage for a lean production image
-      target: runner
-    container_name: e-shop-server-prod
-    restart: unless-stopped
+      target: dev
+    image: e-shop-server:build
+    container_name: e-shop-server-dev
+    restart: "no"
     ports:
       - "3000:3000"
     env_file:
       - ./server/.env
-    # Mount certificates read-only.
     volumes:
+      - ./server:/app
+      - /app/node_modules
       - ./server/certs:/app/certs:ro
     networks:
-      - e-shop-net
+      - public-net
+      - db-net
+      - cache-net
     depends_on:
       - keycloak
-        # condition: service_healthy
+
+  client:
+    build:
+      context: .
+      dockerfile: ./client/Dockerfile
+      target: dev
+    image: e-shop-client:build
+    container_name: e-shop-client-dev
+    restart: "no"
+    ports:
+      - "5173:5173"
+    env_file:
+      - ./client/.env
+    volumes:
+      - ./client:/app
+      - /app/node_modules
+      - ./client/certs:/app/certs:ro
+    environment:
+      - CHOKIDAR_USEPOLLING=1
+    networks:
+      - public-net
+    depends_on:
+      - server
 
   redis:
     image: redis:7-alpine
@@ -29,7 +54,7 @@ services:
     volumes:
       - redis_data:/data
     networks:
-      - e-shop-net
+      - cache-net
 
   keycloak:
     image: quay.io/keycloak/keycloak:latest
@@ -38,6 +63,8 @@ services:
     environment:
       - KEYCLOAK_ADMIN=${KEYCLOAK_ADMIN}
       - KEYCLOAK_ADMIN_PASSWORD=${KEYCLOAK_ADMIN_PASSWORD}
+      - KC_BOOTSTRAP_ADMIN_USERNAME=${KEYCLOAK_ADMIN}
+      - KC_BOOTSTRAP_ADMIN_PASSWORD=${KEYCLOAK_ADMIN_PASSWORD}
       - KC_DB=mariadb
       - KC_DB_URL_HOST=mariadb
       - KC_DB_URL_DATABASE=${MARIADB_DATABASE}
@@ -51,16 +78,11 @@ services:
     volumes:
       - ./keycloak/import:/opt/keycloak/data/import
     networks:
-      - e-shop-net
+      - public-net
+      - db-net
     depends_on:
       mariadb:
         condition: service_healthy
-    # healthcheck:
-    #   test: ["CMD-SHELL", "exec 3<> /dev/tcp/127.0.0.1/9000; echo -e 'GET /health/ready HTTP/1.1\\r\\nhost: http://localhost\\r\\nConnection: close\\r\\n\\r\\n' >&3; if [ $? -eq 0 ]; then echo 'Healthcheck Successful'; exit 0; else echo 'Healthcheck Failed'; exit 1; fi;"]
-    #   interval: 30s
-    #   timeout: 10s
-    #   retries: 5
-    #   start_period: 30s
 
   mariadb:
     image: mariadb:latest
@@ -75,17 +97,30 @@ services:
       - MARIADB_USER=${MARIADB_USER}
       - MARIADB_PASSWORD=${MARIADB_PASSWORD}
     networks:
-      - e-shop-net
+      - db-net
     healthcheck:
       test: ["CMD", "mariadb-admin", "ping", "-h", "localhost", "-u", "root", "-p${MARIADB_ROOT_PASSWORD}"]
       interval: 10s
       timeout: 5s
       retries: 5
 
+  adminer:
+    image: adminer
+    container_name: adminer
+    networks:
+      - public-net
+      - db-net
+    ports:
+      - "8081:8080"
+    environment:
+      - ADMINER_DEFAULT_SERVER=mariadb
 
-# Define the network
 networks:
-  e-shop-net:
+  public-net:
+    driver: bridge
+  db-net:
+    driver: bridge
+  cache-net:
     driver: bridge
 
 volumes:
