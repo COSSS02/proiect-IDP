@@ -11,6 +11,7 @@ services:
       - internal-net
       - db-net
       - cache-net
+      - outbound-net
     deploy:
       replicas: 4
       restart_policy:
@@ -151,6 +152,8 @@ networks:
   cache-net:
     driver: overlay
     internal: true
+  outbound-net:
+    driver: overlay
 
 volumes:
   keycloak_db_data:
