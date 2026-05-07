@@ -27,3 +27,20 @@ services:
         paths:
           - /adminer
         strip_path: false
+
+  - name: prometheus-monitor
+    url: http://prometheus:9090
+    routes:
+      - name: prometheus-route
+        paths:
+          - /prometheus
+        strip_path: false
+
+  - name: grafana-dashboard
+    url: http://grafana:3001
+    routes:
+      - name: grafana-route
+        paths:
+          - /grafana
+        strip_path: false
+        preserve_host: true

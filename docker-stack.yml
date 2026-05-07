@@ -140,6 +140,57 @@ services:
         - "kong.service=adminer"
         - "kong.upstream=adminer:8080"
 
+  prometheus:
+    image: prom/prometheus
+    volumes:
+        - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+        - '--config.file=/etc/prometheus/prometheus.yml'
+        - '--web.external-url=/prometheus'
+    networks:
+        - monitoring-net
+        - internal-net
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+
+  node_exporter:
+    image: prom/node-exporter
+    deploy:
+        mode: global
+    volumes:
+        - /proc:/host/proc:ro
+        - /sys:/host/sys:ro
+        - /:/rootfs:ro
+    command:
+        - '--path.procfs=/host/proc'
+        - '--path.rootfs=/rootfs'
+        - '--path.sysfs=/host/sys'
+        - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
+    networks:
+        - monitoring-net
+        - internal-net
+
+  grafana:
+    image: grafana/grafana
+    environment:
+        - GF_SERVER_HTTP_PORT=3001
+        - GF_SERVER_SERVE_FROM_SUB_PATH=true
+        - GF_SERVER_ROOT_URL=%(protocol)s://%(domain)s/grafana/
+        - GF_ASSET_SERVING_BASE_URL=%(protocol)s://%(domain)s/grafana/assets/
+    volumes:
+        - grafana-volume:/var/lib/grafana
+        - ./grafana/provisioning:/etc/grafana/provisioning:ro
+        - ./grafana/dashboards:/var/lib/grafana/dashboards:ro
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    networks:
+        - monitoring-net
+        - internal-net
+
 networks:
   gateway-net:
     driver: overlay
@@ -152,9 +203,13 @@ networks:
   cache-net:
     driver: overlay
     internal: true
+  monitoring-net:
+    driver: overlay
+    internal: true
   outbound-net:
     driver: overlay
 
 volumes:
   keycloak_db_data:
   redis_data:
+  grafana-volume:
