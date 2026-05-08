@@ -8,7 +8,8 @@ services:
     volumes:
       - ./server/certs:/app/certs:ro
     networks:
-      - internal-net
+      - app-net
+      - auth-net
       - db-net
       - cache-net
       - outbound-net
@@ -27,7 +28,7 @@ services:
     volumes:
       - ./client/certs:/app/certs:ro
     networks:
-      - internal-net
+      - app-net
     deploy:
       replicas: 1
       restart_policy:
@@ -67,7 +68,7 @@ services:
     volumes:
       - ./keycloak/import:/opt/keycloak/data/import
     networks:
-      - internal-net
+      - auth-net
       - db-net
     deploy:
       replicas: 1
@@ -96,7 +97,10 @@ services:
       - 8444:8444
     networks:
       - gateway-net
-      - internal-net
+      - app-net
+      - auth-net
+      - monitoring-net
+      - db-net
     deploy:
       replicas: 1
       restart_policy:
@@ -128,7 +132,6 @@ services:
   adminer:
     image: adminer
     networks:
-      - internal-net
       - db-net
     environment:
       - ADMINER_DEFAULT_SERVER=mariadb
@@ -149,7 +152,6 @@ services:
         - '--web.external-url=/prometheus'
     networks:
         - monitoring-net
-        - internal-net
     deploy:
       replicas: 1
       restart_policy:
@@ -168,9 +170,10 @@ services:
         - '--path.rootfs=/rootfs'
         - '--path.sysfs=/host/sys'
         - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
+        - '--collector.systemd'
+        - '--collector.processes'
     networks:
         - monitoring-net
-        - internal-net
 
   grafana:
     image: grafana/grafana
@@ -189,12 +192,14 @@ services:
         condition: on-failure
     networks:
         - monitoring-net
-        - internal-net
 
 networks:
   gateway-net:
     driver: overlay
-  internal-net:
+  app-net:
+    driver: overlay
+    internal: true
+  auth-net:
     driver: overlay
     internal: true
   db-net:
