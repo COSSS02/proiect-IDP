@@ -1,1 +1,0 @@
-while true; do curl -k https://127.0.0.1:3000/health; echo; sleep 1; done 

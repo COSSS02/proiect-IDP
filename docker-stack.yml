@@ -1,8 +1,6 @@
-version: '3.8'
-
 services:
   server:
-    image: e-shop-server:build
+    image: cosss02/e-shop-server:build
     env_file:
       - ./server/.env
     volumes:
@@ -14,15 +12,18 @@ services:
       - cache-net
       - outbound-net
     deploy:
-      replicas: 4
+      replicas: 2
       restart_policy:
         condition: on-failure
       labels:
+        - "deploy.group=api"
+        - "deploy.version=1.0.0"
+        - "deploy.environment=production"
         - "kong.service=server"
         - "kong.upstream=server:3000"
 
   client:
-    image: e-shop-client:build
+    image: cosss02/e-shop-client:build
     env_file:
       - ./client/.env
     volumes:
@@ -34,6 +35,9 @@ services:
       restart_policy:
         condition: on-failure
       labels:
+        - "deploy.group=api"
+        - "deploy.version=1.0.0"
+        - "deploy.environment=production"
         - "kong.service=client"
         - "kong.upstream=client:5173"
 
@@ -47,19 +51,19 @@ services:
       replicas: 1
       restart_policy:
         condition: on-failure
+      placement:
+        constraints: [node.role == manager]
+      labels:
+        - "deploy.group=infrastructure"
+        - "deploy.version=1.0.0"
+        - "deploy.environment=production"
 
   keycloak:
     image: quay.io/keycloak/keycloak:latest
     command: start-dev --import-realm --verbose
+    env_file:
+      - ./.env
     environment:
-      - KC_BOOTSTRAP_ADMIN_USERNAME=${KEYCLOAK_ADMIN}
-      - KC_BOOTSTRAP_ADMIN_PASSWORD=${KEYCLOAK_ADMIN_PASSWORD}
-      - KC_DB=${KEYCLOAK_DB}
-      - KC_DB_URL_HOST=${KEYCLOAK_DB_URL_HOST}
-      - KC_DB_URL_DATABASE=${MARIADB_DATABASE}
-      - KC_DB_USERNAME=${MARIADB_USER}
-      - KC_DB_PASSWORD=${MARIADB_PASSWORD}
-      - KC_HTTP_PORT=${KEYCLOAK_HTTP_PORT}
       - KC_HEALTH_ENABLED=true
       - KC_HOSTNAME=localhost
       - KC_HOSTNAME_STRICT=false
@@ -75,6 +79,9 @@ services:
       restart_policy:
         condition: on-failure
       labels:
+        - "deploy.group=api"
+        - "deploy.version=1.0.0"
+        - "deploy.environment=production"
         - "kong.service=keycloak"
         - "kong.upstream=keycloak:8080"
 
@@ -93,8 +100,8 @@ services:
     ports:
       - "80:8000"
       - "443:8443"
-      - 8001:8001
-      - 8444:8444
+      - "8001:8001"
+      - "8444:8444"
     networks:
       - gateway-net
       - app-net
@@ -105,41 +112,46 @@ services:
       replicas: 1
       restart_policy:
         condition: on-failure
+      labels:
+        - "deploy.group=infrastructure"
+        - "deploy.version=1.0.0"
+        - "deploy.environment=production"
 
   mariadb:
     image: mariadb:latest
     command: --innodb-use-native-aio=0
+    env_file:
+      - ./.env
     volumes:
       - keycloak_db_data:/var/lib/mysql
       - ./mariadb:/docker-entrypoint-initdb.d
-    environment:
-      - MARIADB_ROOT_PASSWORD=${MARIADB_ROOT_PASSWORD}
-      - MARIADB_DATABASE=${MARIADB_DATABASE}
-      - MARIADB_USER=${MARIADB_USER}
-      - MARIADB_PASSWORD=${MARIADB_PASSWORD}
     networks:
       - db-net
-    healthcheck:
-      test: ["CMD", "mariadb-admin", "ping", "-h", "localhost", "-u", "root", "-p${MARIADB_ROOT_PASSWORD}"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
     deploy:
       replicas: 1
       restart_policy:
         condition: on-failure
+      placement:
+        constraints: [node.role == manager]
+      labels:
+        - "deploy.group=data"
+        - "deploy.version=1.0.0"
+        - "deploy.environment=production"
 
   adminer:
     image: adminer
     networks:
       - db-net
     environment:
-      - ADMINER_DEFAULT_SERVER=mariadb
+      - ADMINER_DEFAULT_SERVER=e-shop_mariadb
     deploy:
       replicas: 1
       restart_policy:
         condition: on-failure
       labels:
+        - "deploy.group=infrastructure"
+        - "deploy.version=1.0.0"
+        - "deploy.environment=production"
         - "kong.service=adminer"
         - "kong.upstream=adminer:8080"
 
@@ -156,11 +168,13 @@ services:
       replicas: 1
       restart_policy:
         condition: on-failure
+      labels:
+        - "deploy.group=monitoring"
+        - "deploy.version=1.0.0"
+        - "deploy.environment=production"
 
   node_exporter:
     image: prom/node-exporter
-    deploy:
-        mode: global
     volumes:
         - /proc:/host/proc:ro
         - /sys:/host/sys:ro
@@ -174,6 +188,12 @@ services:
         - '--collector.processes'
     networks:
         - monitoring-net
+    deploy:
+      mode: global
+      labels:
+        - "deploy.group=monitoring"
+        - "deploy.version=1.0.0"
+        - "deploy.environment=production"
 
   grafana:
     image: grafana/grafana
@@ -190,6 +210,12 @@ services:
       replicas: 1
       restart_policy:
         condition: on-failure
+      placement:
+        constraints: [node.role == manager]
+      labels:
+        - "deploy.group=monitoring"
+        - "deploy.version=1.0.0"
+        - "deploy.environment=production"
     networks:
         - monitoring-net
 
