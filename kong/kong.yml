@@ -27,6 +27,7 @@ services:
         paths:
           - /adminer
         strip_path: false
+        preserve_host: true
 
   - name: prometheus-monitor
     url: http://prometheus:9090

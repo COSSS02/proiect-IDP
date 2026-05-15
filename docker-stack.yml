@@ -219,6 +219,26 @@ services:
     networks:
         - monitoring-net
 
+  portainer:
+    image: portainer/portainer-ce:latest
+    volumes:
+      - portainer_data:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - "9000:9000"
+    networks:
+      - gateway-net
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      placement:
+        constraints: [node.role == manager]
+      labels:
+        - "deploy.group=infrastructure"
+        - "deploy.version=1.0.0"
+        - "deploy.environment=production"
+
 networks:
   gateway-net:
     driver: overlay
@@ -244,3 +264,4 @@ volumes:
   keycloak_db_data:
   redis_data:
   grafana-volume:
+  portainer_data:
