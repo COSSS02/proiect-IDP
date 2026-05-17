@@ -50,12 +50,6 @@ app.use(session({
 
 app.use(keycloak.middleware());
 
-app.get('/health', (req, res) => {
-    const containerId = os.hostname();
-    console.log(`Health check handled by container: ${containerId}`);
-    res.status(200).send(`OK from container: ${containerId}`);
-});
-
 app.use(express.static(path.join(__dirname, 'client/dist')));
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
