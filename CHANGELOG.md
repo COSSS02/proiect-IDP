@@ -1,5 +1,29 @@
 # Changelog
 
+## [1.13.0] - 2026-05-17
+### Added
+- Github Workflow pentru actualizarea automata a imaginilor din dockerhub.
+
+## [1.12.0] - 2026-05-15
+### Added
+- Portainer pentru a vizualiza stackul din interfata grafica.
+
+## [1.11.0] - 2026-05-14
+### Modified
+- Stack deployment pentru a folosi un nod manager si doi workeri.
+
+## [1.10.0] - 2026-05-08
+### Modified
+- Separare servicii intre retele diferite.
+
+## [1.9.0] - 2026-05-07
+### Added
+- Monitorizare prin Prometheus si dashboard de vizualizare prin Grafana.
+
+## [1.8.0] - 2026-05-03
+### Added
+- Kong API Gateway prin care se acceseaza toate celelalte servicii.
+
 ## [1.7.0] - 2026-04-26
 ### Added
 - Utilitarul de gestionare a bazelor de date Adminer.

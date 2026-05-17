@@ -3,7 +3,7 @@ _transform: true
 
 services:
   - name: client-app
-    url: https://client:5173
+    url: https://tasks.client:5173
     routes:
       - name: client-route
         paths:
@@ -12,7 +12,7 @@ services:
         preserve_host: true
 
   - name: keycloak-auth
-    url: http://keycloak:8080
+    url: http://tasks.keycloak:8080
     routes:
       - name: auth-route
         paths:
@@ -21,7 +21,7 @@ services:
         preserve_host: true
 
   - name: adminer-db
-    url: http://adminer:8080
+    url: http://tasks.adminer:8080
     routes:
       - name: adminer-route
         paths:
@@ -30,7 +30,7 @@ services:
         preserve_host: true
 
   - name: prometheus-monitor
-    url: http://prometheus:9090
+    url: http://tasks.prometheus:9090
     routes:
       - name: prometheus-route
         paths:
@@ -38,7 +38,7 @@ services:
         strip_path: false
 
   - name: grafana-dashboard
-    url: http://grafana:3001
+    url: http://tasks.grafana:3001
     routes:
       - name: grafana-route
         paths:

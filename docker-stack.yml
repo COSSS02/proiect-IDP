@@ -97,6 +97,10 @@ services:
       KONG_PROXY_ERROR_LOG: /dev/stderr
       KONG_ADMIN_ERROR_LOG: /dev/stderr
       KONG_ADMIN_LISTEN: 0.0.0.0:8001, 0.0.0.0:8444 ssl
+      KONG_DNS_RESOLVER: "127.0.0.11"
+      KONG_DNS_ORDER: "A,CNAME"
+      KONG_DNS_NOT_FOUND_TTL: "2"
+      KONG_DNS_ERROR_TTL: "1"
     ports:
       - "80:8000"
       - "443:8443"
@@ -148,6 +152,8 @@ services:
       replicas: 1
       restart_policy:
         condition: on-failure
+      placement:
+        constraints: [node.role == manager]
       labels:
         - "deploy.group=infrastructure"
         - "deploy.version=1.0.0"

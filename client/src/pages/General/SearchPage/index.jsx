@@ -64,7 +64,7 @@ function SearchPage() {
             <h1>{t('search_results')}"{query}"</h1>
             <SortControl currentSort={currentSort} onSortChange={handleSortChange} />
 
-            {loading && <p>Searching...</p>}
+            {loading && <p>Searching.....</p>}
             {error && <p className="error-message">{error}</p>}
             {!loading && !error && (
                 <>
